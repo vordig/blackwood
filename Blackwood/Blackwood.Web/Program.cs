@@ -1,8 +1,10 @@
 ﻿using System.Text;
+using AutoMapper;
 using Blackwood.Core.Services;
 using Blackwood.Services;
 using Blackwood.Services.Settings;
 using Blackwood.Web.Endpoints;
+using Blackwood.Web.Mapping;
 using Blackwood.Web.Middlewares;
 using Blackwood.Web.Settings;
 using HashidsNet;
@@ -48,20 +50,15 @@ builder.Services.AddAuthorization(config =>
 
 builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("Auth"));
 
-var hashIdsSettings = builder.Configuration.GetSection("HashIds").Get<HashIdsSettings>();
-builder.Services.AddSingleton<IHashids>(_ => new Hashids(hashIdsSettings.Salt, hashIdsSettings.Length));
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    var hashIdsSettings = builder.Configuration.GetSection("HashIds").Get<HashIdsSettings>();
+    var hashIds = new Hashids(hashIdsSettings.Salt, hashIdsSettings.Length);
+    mc.AddProfile(new MappingProfile(hashIds));
+});
 
-// instead of adding IHashIds to DI I will add it to mapping profile via constructor
-// IHashIds will be used only via mapping
-
-// var mapperConfig = new MapperConfiguration(mc =>
-// {
-//     mc.AddProfile(new MappingProfile());
-//     mc.AddProfile(new SkyboxMappingProfile());
-// });
-//
-// IMapper mapper = mapperConfig.CreateMapper();
-// services.AddSingleton(mapper);
+var mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 // change to transient
 builder.Services.AddSingleton<ISessionService, SessionService>();

@@ -46,7 +46,8 @@ public class SessionService : ISessionService
         var result = new CreateSessionServiceResponse
         {
             AccessToken = accessToken,
-            RefreshToken = session.RefreshToken
+            RefreshToken = session.RefreshToken,
+            SessionId = sessionId
         };
         return result;
     }

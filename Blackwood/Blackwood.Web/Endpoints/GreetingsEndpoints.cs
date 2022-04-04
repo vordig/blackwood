@@ -10,8 +10,8 @@ public static class GreetingsEndpoints
     public static void MapGreetingsEndpoints(this WebApplication app)
     {
         app.MapGet("/greetings", Greeting);
-        app.MapGet("/greetings/{id}", GreetingByIntId);
-        app.MapGet("/greetings/decode/{id}", GreetingDecodeId);
+        // app.MapGet("/greetings/{id}", GreetingByIntId);
+        // app.MapGet("/greetings/decode/{id}", GreetingDecodeId);
     }
     
     private static async Task<IResult> GreetingDecodeId(IHashids hashids, string id)
