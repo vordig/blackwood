@@ -1,4 +1,4 @@
-﻿namespace Blackwood.Web.Settings;
+﻿namespace Blackwood.Services.Settings;
 
 public class AuthSettings
 {
