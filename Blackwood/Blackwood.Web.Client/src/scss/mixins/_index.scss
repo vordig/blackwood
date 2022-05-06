@@ -1,0 +1,4 @@
+﻿@forward 'colors' as colors-*;
+@forward 'roles' as roles-* show roles-primary, roles-primary-container, roles-secondary, roles-secondary-container,
+  roles-tertiary, roles-tertiary-container, roles-error, roles-error-container, roles-background, roles-surface,
+  roles-surface-variant, roles-inverse-surface;

@@ -1,0 +1,11 @@
+﻿.bw-app {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: 'main actions' 'main messages';
+
+  .bw-messages-panel {
+    grid-area: messages;
+  }
+}
