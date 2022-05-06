@@ -1,0 +1,22 @@
+﻿@mixin surface($state) {
+  @include _private-set-complex-background-interaction(--md-sys-color-on-surface, --md-sys-state-#{$state}-state-layer-opacity);
+}
+
+@mixin surface-variant($state) {
+  @include _private-set-complex-background-interaction(--md-sys-color-on-surface-variant, --md-sys-state-#{$state}-state-layer-opacity);
+}
+
+@mixin inverse-surface($state) {
+  @include _private-set-complex-background-interaction(--md-sys-color-inverse-on-surface, --md-sys-state-#{$state}-state-layer-opacity);
+}
+
+@mixin _private-set-complex-background-interaction($overlay-rgb-var, $overlay-opacity-var) {
+  --state-interaction-r: var(#{$overlay-rgb-var}-r);
+  --state-interaction-g: var(#{$overlay-rgb-var}-g);
+  --state-interaction-b: var(#{$overlay-rgb-var}-b);
+  --state-interaction-opacity: var(#{$overlay-opacity-var});
+  --background-interaction-r: calc(var(--background-r) * (1.0 - var(--state-interaction-opacity)) + var(--state-r) * var(--state-interaction-opacity));
+  --background-interaction-g: calc(var(--background-g) * (1.0 - var(--state-interaction-opacity)) + var(--state-g) * var(--state-interaction-opacity));
+  --background-interaction-b: calc(var(--background-b) * (1.0 - var(--state-interaction-opacity)) + var(--state-b) * var(--state-interaction-opacity));
+  background-color: rgb(var(--background-interaction-r), var(--background-interaction-g), var(--background-interaction-b)) !important;
+}

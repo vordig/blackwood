@@ -74,16 +74,16 @@
   }
 }
 
-@mixin _private-set-complex-background($background-rgb-var, $foreground-rgb-var, $foreground-opacity-var) {
-  --background-r: var(#{$background-rgb-var}-r);
-  --background-g: var(#{$background-rgb-var}-g);
-  --background-b: var(#{$background-rgb-var}-b);
-  --foreground-r: var(#{$foreground-rgb-var}-r);
-  --foreground-g: var(#{$foreground-rgb-var}-g);
-  --foreground-b: var(#{$foreground-rgb-var}-b);
-  --foreground-opacity: var(#{$foreground-opacity-var});
-  --result-r: calc(var(--foreground-r) * var(--foreground-opacity) + var(--background-r) * (1.0 - var(--foreground-opacity)));
-  --result-g: calc(var(--foreground-g) * var(--foreground-opacity) + var(--background-g) * (1.0 - var(--foreground-opacity)));
-  --result-b: calc(var(--foreground-b) * var(--foreground-opacity) + var(--background-b) * (1.0 - var(--foreground-opacity)));
-  background-color: rgb(var(--result-r), var(--result-g), var(--result-b)) !important;
+@mixin _private-set-complex-background($base-rgb-var, $overlay-rgb-var, $overlay-opacity-var) {
+  --base-r: var(#{$base-rgb-var}-r);
+  --base-g: var(#{$base-rgb-var}-g);
+  --base-b: var(#{$base-rgb-var}-b);
+  --state-r: var(#{$overlay-rgb-var}-r);
+  --state-g: var(#{$overlay-rgb-var}-g);
+  --state-b: var(#{$overlay-rgb-var}-b);
+  --state-opacity: var(#{$overlay-opacity-var});
+  --background-r: calc(var(--base-r) * (1.0 - var(--state-opacity)) + var(--state-r) * var(--state-opacity));
+  --background-g: calc(var(--base-g) * (1.0 - var(--state-opacity)) + var(--state-g) * var(--state-opacity));
+  --background-b: calc(var(--base-b) * (1.0 - var(--state-opacity)) + var(--state-b) * var(--state-opacity));
+  background-color: rgb(var(--background-r), var(--background-g), var(--background-b)) !important;
 }

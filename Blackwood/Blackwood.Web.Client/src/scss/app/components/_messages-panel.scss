@@ -1,5 +1,14 @@
 ﻿@use '../../mixins/roles';
+@use '../../mixins/states';
 
 .bw-messages-panel {
-  @include roles.primary;
+  @include roles.surface(1);
+
+  &:hover {
+    @include states.surface(hover);
+  }
+
+  &:active {
+    @include states.surface(pressed);
+  }
 }

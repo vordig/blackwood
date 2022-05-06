@@ -4,6 +4,7 @@
 @use '@angular/material' as mat;
 // Plus imports for other components in your app.
 @use 'scss/mixins/roles' as roles;
+@use 'scss/mixins/states' as states;
 @use 'scss/tokens';
 @use 'scss/material';
 @use 'scss/app';
@@ -53,4 +54,8 @@ body {
 
 .test {
   @include roles.surface(1);
+
+  &:hover {
+    @include states.surface(hover);
+  }
 }
