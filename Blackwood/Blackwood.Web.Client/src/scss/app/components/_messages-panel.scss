@@ -1,6 +1,22 @@
 ﻿@use '../../mixins/roles';
 @use '../../mixins/states';
 
+@use 'sass:color';
+@use 'sass:map';
+
+@function add-overlay($base-color, $overlay-color, $overlay-opacity) {
+  $base-red: color.red($base-color);
+  $base-green: color.green($base-color);
+  $base-blue: color.blue($base-color);
+  $overlay-red: color.red($overlay-color);
+  $overlay-green: color.green($overlay-color);
+  $overlay-blue: color.blue($overlay-color);
+  $result-red: $base-red * (1.0 - $overlay-opacity) + $overlay-red * $overlay-opacity;
+  $result-green: $base-green * (1.0 - $overlay-opacity) + $overlay-green * $overlay-opacity;
+  $result-blue: $base-blue * (1.0 - $overlay-opacity) + $overlay-blue * $overlay-opacity;
+  @return rgb($result-red, $result-green, $result-blue);
+}
+
 .bw-messages-panel {
   @include roles.surface(1);
 

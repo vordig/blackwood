@@ -1,0 +1,117 @@
+﻿@use '../tokens';
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:list';
+
+$base-color-list: --md-sys-color-primary,
+--md-sys-color-on-primary,
+--md-sys-color-primary-container,
+--md-sys-color-on-primary-container,
+--md-sys-color-secondary,
+--md-sys-color-on-secondary,
+--md-sys-color-secondary-container,
+--md-sys-color-on-secondary-container,
+--md-sys-color-tertiary,
+--md-sys-color-on-tertiary,
+--md-sys-color-tertiary-container,
+--md-sys-color-on-tertiary-container,
+--md-sys-color-error,
+--md-sys-color-on-error,
+--md-sys-color-error-container,
+--md-sys-color-on-error-container,
+--md-sys-color-outline,
+--md-sys-color-background,
+--md-sys-color-on-background,
+--md-sys-color-surface,
+--md-sys-color-on-surface,
+--md-sys-color-surface-variant,
+--md-sys-color-on-surface-variant,
+--md-sys-color-inverse-surface,
+--md-sys-color-inverse-on-surface;
+
+@mixin init($theme-name) {
+  @include _private_add_colors_to_theme($theme-name, tokens.$color-palette);
+}
+
+@mixin add-surface-tones($theme-name) {
+  @include _private_add_surface_tones($theme-name, --md-sys-color-surface);
+}
+
+@mixin add-surface-variant-tones($theme-name) {
+  @include _private_add_surface_tones($theme-name, --md-sys-color-surface-variant);
+}
+
+@mixin add-inverse-surface-tones($theme-name) {
+  @include _private_add_surface_tones($theme-name, --md-sys-color-inverse-surface);
+}
+
+@mixin build($theme-name) {
+  @include _private_add_final_colors_to_theme($theme-name, $base-color-list);
+}
+
+@mixin _private_add_surface_tones($theme-name, $surface-color-token) {
+  $primary-color-token: --md-sys-color-primary;
+
+  $surface-color-light: map.get(tokens.$color-palette, #{$surface-color-token}-light);
+  $surface-color-dark: map.get(tokens.$color-palette, #{$surface-color-token}-dark);
+  $primary-color-light: map.get(tokens.$color-palette, #{$primary-color-token}-light);
+  $primary-color-dark: map.get(tokens.$color-palette, #{$primary-color-token}-dark);
+
+  $surface-tones-map: ();
+  $surface-tones-color-list: null;
+
+  @for $i from 1 through 5 {
+    $surface-state-layer-opacity: map.get(tokens.$surface-state-layer-opacity, --md-sys-surface-#{$i}-state-layer-opacity);
+
+    $surface-tones-map: map.set($surface-tones-map, #{$surface-color-token}-#{$i}-light, color.mix($primary-color-light, $surface-color-light, $surface-state-layer-opacity));
+    $surface-tones-map: map.set($surface-tones-map, #{$surface-color-token}-#{$i}-dark, color.mix($primary-color-dark, $surface-color-dark, $surface-state-layer-opacity));
+
+    @if not $surface-tones-color-list {
+      $surface-tones-color-list: #{$surface-color-token}-#{$i};
+    } @else {
+      $surface-tones-color-list: list.append($surface-tones-color-list, #{$surface-color-token}-#{$i});
+    }
+  }
+
+  @include _private_add_colors_to_theme($theme-name, $surface-tones-map);
+  @include _private_add_final_colors_to_theme($theme-name, $surface-tones-color-list);
+}
+
+@mixin _private_add_final_colors_to_theme($theme-name, $color-list) {
+  @include _private_add_to_theme($theme-name) {
+    @media (prefers-color-scheme: light) {
+      @each $color-token in $color-list {
+        #{$color-token}: var(#{$color-token}-light);
+      }
+      &.dark-theme {
+        @each $color-token in $color-list {
+          #{$color-token}: var(#{$color-token}-dark);
+        }
+      }
+    }
+    @media (prefers-color-scheme: dark) {
+      @each $color-token in $color-list {
+        #{$color-token}: var(#{$color-token}-dark);
+      }
+      &.light-theme {
+        @each $color-token in $color-list {
+          #{$color-token}: var(#{$color-token}-light);
+        }
+      }
+    }
+  }
+}
+
+@mixin _private_add_colors_to_theme($theme-name, $color-map) {
+  @include _private_add_to_theme($theme-name) {
+    @each $name, $color in $color-map {
+      #{$name}: $color;
+    }
+  }
+}
+
+@mixin _private_add_to_theme($theme-name) {
+  @at-root .#{$theme-name} {
+    @content;
+  }
+}

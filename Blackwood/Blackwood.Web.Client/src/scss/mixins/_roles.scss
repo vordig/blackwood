@@ -35,55 +35,33 @@
 }
 
 @mixin surface($tone: 0) {
-  @include _private-set-surface-tonal-background(--md-sys-color-surface, --md-sys-color-on-surface, $tone);
+  @include _private-set-basic-role(--md-sys-color-surface-#{$tone}, --md-sys-color-on-surface);
 }
 
 @mixin surface-variant($tone: 0) {
-  @include _private-set-surface-tonal-background(--md-sys-color-surface-variant, --md-sys-color-on-surface-variant, $tone);
+  @include _private-set-basic-role(--md-sys-color-surface-variant-#{$tone}, --md-sys-color-on-surface-variant);
 }
 
 @mixin inverse-surface($tone: 0) {
-  @include _private-set-surface-tonal-background(--md-sys-color-inverse-surface, --md-sys-color-inverse-on-surface, $tone);
+  @include _private-set-basic-role(--md-sys-color-inverse-surface-#{$tone}, --md-sys-color-inverse-on-surface);
 }
 
 @mixin _private-set-accent-role($accent-color, $is-container: false) {
-  $container-rgb-var: --md-sys-color-#{$accent-color};
-  $color-rgb-var: --md-sys-color-on-#{$accent-color};
+  $container-var: --md-sys-color-#{$accent-color};
+  $color-var: --md-sys-color-on-#{$accent-color};
 
   @if $is-container {
-    $container-rgb-var: --md-sys-color-#{$accent-color}-container;
-    $color-rgb-var: --md-sys-color-on-#{$accent-color}-container;
+    $container-var: --md-sys-color-#{$accent-color}-container;
+    $color-var: --md-sys-color-on-#{$accent-color}-container;
   }
 
-  @include _private-set-basic-role($container-rgb-var, $color-rgb-var);
+  @include _private-set-basic-role($container-var, $color-var);
 }
 
-@mixin _private-set-basic-role($container-rgb-var, $color-rgb-var) {
-  --container-rgb: var(#{$container-rgb-var});
-  --color-rgb: var(#{$color-rgb-var});
+@mixin _private-set-basic-role($container-var, $color-var) {
+  --container: var(#{$container-var});
+  --color: var(#{$color-var});
 
-  background-color: var(--container-rgb);
-  color: var(--color-rgb);
-}
-
-@mixin _private-set-surface-tonal-background($container-rgb-var, $color-rgb-var, $tone: 0) {
-  @include _private-set-basic-role($container-rgb-var, $color-rgb-var);
-
-  @if $tone > 0 {
-    @include _private-set-complex-background($container-rgb-var, --md-sys-color-primary, --md-sys-surface-#{$tone}-state-layer-opacity);
-  }
-}
-
-@mixin _private-set-complex-background($base-rgb-var, $overlay-rgb-var, $overlay-opacity-var) {
-  --base-r: var(#{$base-rgb-var}-r);
-  --base-g: var(#{$base-rgb-var}-g);
-  --base-b: var(#{$base-rgb-var}-b);
-  --state-r: var(#{$overlay-rgb-var}-r);
-  --state-g: var(#{$overlay-rgb-var}-g);
-  --state-b: var(#{$overlay-rgb-var}-b);
-  --state-opacity: var(#{$overlay-opacity-var});
-  --background-r: calc(var(--base-r) * (1.0 - var(--state-opacity)) + var(--state-r) * var(--state-opacity));
-  --background-g: calc(var(--base-g) * (1.0 - var(--state-opacity)) + var(--state-g) * var(--state-opacity));
-  --background-b: calc(var(--base-b) * (1.0 - var(--state-opacity)) + var(--state-b) * var(--state-opacity));
-  background-color: rgb(var(--background-r), var(--background-g), var(--background-b)) !important;
+  background-color: var(--container);
+  color: var(--color);
 }

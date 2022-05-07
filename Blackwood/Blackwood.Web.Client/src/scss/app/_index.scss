@@ -1,2 +1,2 @@
-﻿@use 'app';
-@use 'components/messages-panel';
+﻿@forward 'app';
+@forward 'components/messages-panel';
