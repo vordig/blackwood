@@ -1,4 +1,6 @@
-﻿.bw-app {
+﻿@use '../mixins/typography';
+
+.bw-app {
   flex-grow: 1;
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -7,5 +9,55 @@
 
   .bw-messages-panel {
     grid-area: messages;
+  }
+
+  .typography {
+    grid-area: main;
+
+    .display-large {
+      @include typography.display-large;
+    }
+    .display-medium {
+      @include typography.display-medium;
+    }
+    .display-small {
+      @include typography.display-small;
+    }
+    .headline-large {
+      @include typography.headline-large;
+    }
+    .headline-medium {
+      @include typography.headline-medium;
+    }
+    .headline-small {
+      @include typography.headline-small;
+    }
+    .title-large {
+      @include typography.title-large;
+    }
+    .title-medium {
+      @include typography.title-medium;
+    }
+    .title-small {
+      @include typography.title-small;
+    }
+    .label-large {
+      @include typography.label-large;
+    }
+    .label-medium {
+      @include typography.label-medium;
+    }
+    .label-small {
+      @include typography.label-small;
+    }
+    .body-large {
+      @include typography.body-large;
+    }
+    .body-medium {
+      @include typography.body-medium;
+    }
+    .body-small {
+      @include typography.body-small;
+    }
   }
 }

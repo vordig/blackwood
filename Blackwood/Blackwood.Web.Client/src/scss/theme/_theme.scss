@@ -1,0 +1,91 @@
+﻿@use 'sass:map';
+@use 'sass:string';
+
+@use 'typography' as typography;
+@use '../tokens' as tokens;
+@use 'mixins' as mixins;
+
+@mixin init($theme-name) {
+  @include _private-init-typography($theme-name);
+}
+
+@mixin _private-init-typography($theme-name) {
+  $typography-map: typography.get-typography-rules-map();
+  $typography-list: typography.get-typography-rules-list();
+  @include _private-add-map-to-theme($theme-name, tokens.$typeface);
+  @include _private-add-map-to-theme($theme-name, tokens.$typeface-weight);
+  @include _private-add-map-to-theme($theme-name, $typography-map);
+  @include _private-add-typography-to-theme($theme-name, $typography-list);
+}
+
+@mixin _private-add-colors-to-theme($theme-name, $color-list) {
+  @include _private_add_to_theme($theme-name) {
+    @media (prefers-color-scheme: light) {
+      @each $color-token in $color-list {
+        #{$color-token}: var(#{$color-token}-light);
+      }
+      &.dark-theme {
+        @each $color-token in $color-list {
+          #{$color-token}: var(#{$color-token}-dark);
+        }
+      }
+    }
+    @media (prefers-color-scheme: dark) {
+      @each $color-token in $color-list {
+        #{$color-token}: var(#{$color-token}-dark);
+      }
+      &.light-theme {
+        @each $color-token in $color-list {
+          #{$color-token}: var(#{$color-token}-light);
+        }
+      }
+    }
+  }
+}
+
+@mixin _private-add-typography-to-theme($theme-name, $typography-list) {
+  $breakpoint-mobile-to: mixins.get-rems(map-get(tokens.$breakpoints, mobile));
+  $breakpoint-tablet-from: mixins.get-rems(map-get(tokens.$breakpoints, mobile) + 1);
+  $breakpoint-tablet-to: mixins.get-rems(map-get(tokens.$breakpoints, tablet));
+  $breakpoint-desktop-from: mixins.get-rems(map-get(tokens.$breakpoints, tablet) + 1);
+
+  @include _private-add-to-theme($theme-name) {
+    @media (max-width: $breakpoint-mobile-to) {
+      @each $typography-token in $typography-list {
+        #{$typography-token}: var(#{$typography-token}-mobile);
+      }
+    }
+    @media (min-width: $breakpoint-tablet-from) and (max-width: $breakpoint-tablet-to) {
+      @each $typography-token in $typography-list {
+        #{$typography-token}: var(#{$typography-token}-tablet);
+      }
+    }
+    @media (min-width: $breakpoint-desktop-from) {
+      @each $typography-token in $typography-list {
+        #{$typography-token}: var(#{$typography-token}-desktop);
+      }
+    }
+  }
+}
+
+@mixin _private-add-list-to-theme($theme-name, $token-list) {
+  @include _private-add-to-theme($theme-name) {
+    @each $token in $token-list {
+      #{$token}: var(#{$token});
+    }
+  }
+}
+
+@mixin _private-add-map-to-theme($theme-name, $map) {
+  @include _private-add-to-theme($theme-name) {
+    @each $name, $value in $map {
+      #{$name}: $value;
+    }
+  }
+}
+
+@mixin _private-add-to-theme($theme-name) {
+  @at-root .#{$theme-name} {
+    @content;
+  }
+}

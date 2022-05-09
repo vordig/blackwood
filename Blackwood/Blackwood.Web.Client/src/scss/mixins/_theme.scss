@@ -1,4 +1,4 @@
-﻿@use '../tokens';
+﻿@use '../tokens' as tokens;
 @use 'sass:map';
 @use 'sass:color';
 @use 'sass:list';
@@ -43,6 +43,75 @@ $base-color-list: --md-sys-color-primary,
 
 @mixin add-inverse-surface-tones($theme-name) {
   @include _private_add_surface_tones($theme-name, --md-sys-color-inverse-surface);
+}
+
+@mixin add-primary-states($theme-name) {
+  $states-list: hover, focus, pressed, dragged;
+
+  $color-token: --md-sys-color-primary;
+  $on-color-token: --md-sys-color-on-primary;
+
+  $color-light: map.get(tokens.$color-palette, #{$color-token}-light);
+  $color-dark: map.get(tokens.$color-palette, #{$color-token}-dark);
+  $on-color-light: map.get(tokens.$color-palette, #{$on-color-token}-light);
+  $on-color-dark: map.get(tokens.$color-palette, #{$on-color-token}-dark);
+
+  $states-color-map: ();
+  $states-color-list: null;
+
+  @each $state in $states-list {
+    $state-layer-opacity: map.get(tokens.$state-layer-opacity, --md-sys-state-#{$state}-state-layer-opacity);
+
+    $states-color-map: map.set($states-color-map, #{$color-token}-#{$state}-light, color.mix($on-color-light, $color-light, $state-layer-opacity));
+    $states-color-map: map.set($states-color-map, #{$color-token}-#{$state}-dark, color.mix($on-color-dark, $color-dark, $state-layer-opacity));
+
+    @if not $states-color-list {
+      $states-color-list: #{$color-token}-#{$state};
+    } @else {
+      $states-color-list: list.append($states-color-list, #{$color-token}-#{$state});
+    }
+  }
+
+  @include _private_add_colors_to_theme($theme-name, $states-color-map);
+  @include _private_add_final_colors_to_theme($theme-name, $states-color-list);
+}
+
+@mixin add-common-states($theme-name) {
+  $selected-state-color-token: --md-sys-color-surface-variant;
+  $activated-state-color-token: --md-sys-color-secondary-container;
+  $activated-state-on-color-token: --md-sys-color-on-secondary-container;
+  $disabled-state-color-token: --md-sys-color-on-surface;
+  $disabled-state-on-color-token: --md-sys-color-on-surface;
+
+  $disabled-light: map.get(tokens.$color-palette, #{$disabled-state-color-token}-light);
+  $disabled-dark: map.get(tokens.$color-palette, #{$disabled-state-color-token}-dark);
+  $on-disabled-light: map.get(tokens.$color-palette, #{$disabled-state-on-color-token}-light);
+  $on-disabled-dark: map.get(tokens.$color-palette, #{$disabled-state-on-color-token}-dark);
+
+  $disabled-opacity: map.get(tokens.$disabled-state-opacity, --md-sys-state-disabled-container-opacity);
+  $on-disabled-opacity: map.get(tokens.$disabled-state-opacity, --md-sys-state-disabled-content-opacity);
+
+  $states-color-map: (
+    --md-sys-color-selected-light: map.get(tokens.$color-palette, #{$selected-state-color-token}-light),
+    --md-sys-color-selected-dark: map.get(tokens.$color-palette, #{$selected-state-color-token}-dark),
+    --md-sys-color-activated-light: map.get(tokens.$color-palette, #{$activated-state-color-token}-light),
+    --md-sys-color-activated-dark: map.get(tokens.$color-palette, #{$activated-state-color-token}-dark),
+    --md-sys-color-on-activated-light: map.get(tokens.$color-palette, #{$activated-state-on-color-token}-light),
+    --md-sys-color-on-activated-dark: map.get(tokens.$color-palette, #{$activated-state-on-color-token}-dark),
+    --md-sys-color-disabled-light: color.change($disabled-light, $alpha: $disabled-opacity),
+    --md-sys-color-disabled-dark: color.change($disabled-dark, $alpha: $disabled-opacity),
+    --md-sys-color-on-disabled-light: color.change($on-disabled-light, $alpha: $on-disabled-opacity),
+    --md-sys-color-on-disabled-dark: color.change($on-disabled-dark, $alpha: $on-disabled-opacity)
+  );
+
+  $states-color-list: --md-sys-color-selected,
+  --md-sys-color-activated,
+  --md-sys-color-on-activated,
+  --md-sys-color-disabled,
+  --md-sys-color-on-disabled;
+
+  @include _private_add_colors_to_theme($theme-name, $states-color-map);
+  @include _private_add_final_colors_to_theme($theme-name, $states-color-list);
 }
 
 @mixin build($theme-name) {

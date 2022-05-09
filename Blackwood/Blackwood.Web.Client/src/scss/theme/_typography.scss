@@ -1,0 +1,99 @@
+﻿@use 'sass:list';
+@use 'sass:map';
+@use 'sass:math';
+
+@use '../tokens' as tokens;
+@use 'mixins' as mixins;
+
+$_private-typescale-token: --md-sys-typescale;
+$_private-typescale-names: display, headline, title, label, body;
+$_private-typescale-sizes: large, medium, small;
+$_private-typescale-members: line-height, size, tracking;
+
+@function get-typography-rules-list() {
+  $typography-list: null;
+
+  @each $name in $_private-typescale-names {
+    @each $size in $_private-typescale-sizes {
+      @each $member in $_private-typescale-members {
+        $item: #{$_private-typescale-token}-#{$name}-#{$size}-#{$member};
+        @if not $typography-list {
+          $typography-list: $item;
+        } @else {
+          $typography-list: list.append($typography-list, $item);
+        }
+      }
+    }
+  }
+
+  @return $typography-list;
+}
+
+@function get-typography-rules-map() {
+  $typescale-map: ();
+
+  @each $name in $_private-typescale-names {
+    @each $size in $_private-typescale-sizes {
+      $typescale-map: _private-add-typography-rule($typescale-map, #{$name}-#{$size});
+    }
+  }
+
+  @return $typescale-map;
+}
+
+@function _private-add-typography-rule($typescale-map, $rule-name) {
+  $font: map.get(tokens.$typescale, #{$_private-typescale-token}-#{$rule-name}-font);
+  $line-height: map.get(tokens.$typescale, #{$_private-typescale-token}-#{$rule-name}-line-height);
+  $size: map.get(tokens.$typescale, #{$_private-typescale-token}-#{$rule-name}-size);
+  $tracking: map.get(tokens.$typescale, #{$_private-typescale-token}-#{$rule-name}-tracking);
+  $weight: map.get(tokens.$typescale, #{$_private-typescale-token}-#{$rule-name}-weight);
+
+  $typescale-map-to-add: (
+    #{$_private-typescale-token}-#{$rule-name}-font: var(#{$font}),
+    #{$_private-typescale-token}-#{$rule-name}-weight: var(#{$weight})
+  );
+
+  $typescale-map: map.merge($typescale-map, $typescale-map-to-add);
+
+  $line-height-modificator: _private-get-modificator($line-height, $size);
+  $tracking-modificator: _private-get-modificator($tracking, $size);
+
+  $screen-sizes: mobile, tablet, desktop;
+  @each $screen-size in $screen-sizes {
+    $device-offset-level: map.get(tokens.$typescale-device-offset-level, #{$_private-typescale-token}-#{$rule-name}-#{$screen-size});
+    $device-size: _private-apply-offset-level($size, $device-offset-level);
+    $device-line-height: _private-get-line-height($device-size, $line-height-modificator);
+    $device-tracking: _private-get-tracking($device-size, $tracking-modificator);
+    $device-size-rem: mixins.get-rems($device-size);
+    $typescale-map: _private-add-typescale-rule-for-device($typescale-map, $rule-name, $device-line-height, $device-size-rem, $device-tracking, $screen-size);
+  }
+
+  @return $typescale-map;
+}
+
+@function _private-add-typescale-rule-for-device($typescale-map, $rule-name, $line-height, $size, $tracking, $device) {
+  $typescale-map-to-add: (
+    #{$_private-typescale-token}-#{$rule-name}-line-height-#{$device}: $line-height,
+    #{$_private-typescale-token}-#{$rule-name}-size-#{$device}: $size,
+    #{$_private-typescale-token}-#{$rule-name}-tracking-#{$device}: $tracking
+  );
+  @return map.merge($typescale-map, $typescale-map-to-add);
+}
+
+@function _private-apply-offset-level($size-points, $offset-level) {
+  @return $size-points + ($offset-level * tokens.$typescale-device-offset-level-cost);
+}
+
+@function _private-get-line-height($size-points, $modificator) {
+  $result-points: math.round($size-points * $modificator);
+  @return mixins.get-rems($result-points);
+}
+
+@function _private-get-tracking($size-points, $modificator) {
+  $result-points: math.div(math.round($size-points * $modificator * 100), 100);
+  @return mixins.get-rems($result-points);
+}
+
+@function _private-get-modificator($target-points, $size-points) {
+  @return  math.div($target-points, $size-points);
+}
