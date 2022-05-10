@@ -1,5 +1,8 @@
-﻿@use 'sass:list';
+﻿@use 'sass:color';
+@use 'sass:list';
+@use 'sass:map';
 
+@use '../tokens' as tokens;
 @use 'mixins' as mixins;
 
 $_private-color-token: --md-sys-color;
@@ -37,6 +40,9 @@ $_private-surface-names: surface, surface-variant, inverse-surface;
 }
 
 @function get-roles-map() {
+  $surface-tones-map: _private-get-surface-tones-map();
+  $roles-map: map.merge(tokens.$color-palette, $surface-tones-map);
+  @return $roles-map;
 }
 
 @function _private-get-color-list() {
@@ -64,4 +70,24 @@ $_private-surface-names: surface, surface-variant, inverse-surface;
 }
 
 @function _private-get-surface-tones-map() {
+  $surface-tones-map: ();
+
+  $primary-color-token: #{$_private-color-token}-primary;
+  $primary-color-light: map.get(tokens.$color-palette, #{$primary-color-token}-light);
+  $primary-color-dark: map.get(tokens.$color-palette, #{$primary-color-token}-dark);
+
+  @each $name in $_private-surface-names {
+    $surface-color-light: map.get(tokens.$color-palette, #{$_private-color-token}-#{$name}-light);
+    $surface-color-dark: map.get(tokens.$color-palette, #{$_private-color-token}-#{$name}-dark);
+    @for $i from 1 through 5 {
+      $surface-state-layer-opacity: map.get(tokens.$surface-state-layer-opacity, --md-sys-surface-#{$i}-state-layer-opacity);
+      $surface-tones-map-to-add: (
+        #{$_private-color-token}-#{$name}-#{$i}-light: color.mix($primary-color-light, $surface-color-light, $surface-state-layer-opacity),
+        #{$_private-color-token}-#{$name}-#{$i}-dark: color.mix($primary-color-dark, $surface-color-dark, $surface-state-layer-opacity)
+      );
+      $surface-tones-map: map.merge($surface-tones-map, $surface-tones-map-to-add);
+    }
+  }
+
+  @return $surface-tones-map;
 }

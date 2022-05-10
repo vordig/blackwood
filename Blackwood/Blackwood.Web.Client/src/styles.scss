@@ -5,11 +5,10 @@
 // Plus imports for other components in your app.
 @use 'scss/mixins/roles' as roles;
 @use 'scss/mixins/states' as states;
-@use 'scss/mixins/theme' as theme;
 @use 'scss/material';
 @use 'scss/app';
 
-@use 'scss/theme' as theme-beta;
+@use 'scss/theme' as theme;
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -17,15 +16,7 @@
 @include mat.core();
 
 $theme-name: bw-theme;
-//@include theme.init($theme-name);
-//@include theme.add-surface-tones($theme-name);
-//@include theme.add-surface-variant-tones($theme-name);
-//@include theme.add-inverse-surface-tones($theme-name);
-//@include theme.add-common-states($theme-name);
-//@include theme.add-primary-states($theme-name);
-//@include theme.build($theme-name);
-
-@include theme-beta.init($theme-name);
+@include theme.init($theme-name);
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker

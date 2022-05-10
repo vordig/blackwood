@@ -26,6 +26,13 @@ $_private-typescale-members: line-height, size, tracking;
 }
 
 @function get-typography-map() {
+  $typography-rules-map: _private-get-typography-rules-map();
+  $typography-map: map.merge(tokens.$typeface, tokens.$typeface-weight);
+  $typography-map: map.merge($typography-map, $typography-rules-map);
+  @return $typography-map;
+}
+
+@function _private-get-typography-rules-map() {
   $typescale-map: ();
 
   @each $name in $_private-typescale-names {
