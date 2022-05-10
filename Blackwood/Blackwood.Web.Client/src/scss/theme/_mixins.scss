@@ -1,4 +1,14 @@
-﻿@function get-rems($points) {
+﻿@use 'sass:list';
+
+@function get-rems($points) {
   $point-cost: 0.0625rem;
   @return $points * $point-cost;
+}
+
+@function add-to-list($list, $item) {
+  @if not $list {
+    @return $item;
+  } @else {
+    @return list.append($list, $item);
+  }
 }

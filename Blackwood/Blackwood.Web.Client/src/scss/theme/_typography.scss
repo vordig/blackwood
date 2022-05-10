@@ -10,18 +10,14 @@ $_private-typescale-names: display, headline, title, label, body;
 $_private-typescale-sizes: large, medium, small;
 $_private-typescale-members: line-height, size, tracking;
 
-@function get-typography-rules-list() {
+@function get-typography-list() {
   $typography-list: null;
 
   @each $name in $_private-typescale-names {
     @each $size in $_private-typescale-sizes {
       @each $member in $_private-typescale-members {
         $item: #{$_private-typescale-token}-#{$name}-#{$size}-#{$member};
-        @if not $typography-list {
-          $typography-list: $item;
-        } @else {
-          $typography-list: list.append($typography-list, $item);
-        }
+        $typography-list: mixins.add-to-list($typography-list, $item);
       }
     }
   }
@@ -29,7 +25,7 @@ $_private-typescale-members: line-height, size, tracking;
   @return $typography-list;
 }
 
-@function get-typography-rules-map() {
+@function get-typography-map() {
   $typescale-map: ();
 
   @each $name in $_private-typescale-names {

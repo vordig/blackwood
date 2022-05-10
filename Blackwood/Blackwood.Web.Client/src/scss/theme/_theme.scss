@@ -2,20 +2,28 @@
 @use 'sass:string';
 
 @use 'typography' as typography;
+@use 'roles' as roles;
 @use '../tokens' as tokens;
 @use 'mixins' as mixins;
 
 @mixin init($theme-name) {
   @include _private-init-typography($theme-name);
+  @include _private-init-roles($theme-name);
 }
 
 @mixin _private-init-typography($theme-name) {
-  $typography-map: typography.get-typography-rules-map();
-  $typography-list: typography.get-typography-rules-list();
+  $typography-map: typography.get-typography-map();
+  $typography-list: typography.get-typography-list();
   @include _private-add-map-to-theme($theme-name, tokens.$typeface);
   @include _private-add-map-to-theme($theme-name, tokens.$typeface-weight);
   @include _private-add-map-to-theme($theme-name, $typography-map);
   @include _private-add-typography-to-theme($theme-name, $typography-list);
+}
+
+@mixin _private-init-roles($theme-name) {
+  $roles-list: roles.get-roles-list();
+  @include _private-add-map-to-theme($theme-name, tokens.$color-palette);
+  @include _private-add-colors-to-theme($theme-name, $roles-list);
 }
 
 @mixin _private-add-colors-to-theme($theme-name, $color-list) {

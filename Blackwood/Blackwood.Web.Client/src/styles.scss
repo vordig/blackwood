@@ -17,13 +17,13 @@
 @include mat.core();
 
 $theme-name: bw-theme;
-@include theme.init($theme-name);
-@include theme.add-surface-tones($theme-name);
-@include theme.add-surface-variant-tones($theme-name);
-@include theme.add-inverse-surface-tones($theme-name);
-@include theme.add-common-states($theme-name);
-@include theme.add-primary-states($theme-name);
-@include theme.build($theme-name);
+//@include theme.init($theme-name);
+//@include theme.add-surface-tones($theme-name);
+//@include theme.add-surface-variant-tones($theme-name);
+//@include theme.add-inverse-surface-tones($theme-name);
+//@include theme.add-common-states($theme-name);
+//@include theme.add-primary-states($theme-name);
+//@include theme.build($theme-name);
 
 @include theme-beta.init($theme-name);
 

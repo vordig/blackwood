@@ -1,0 +1,67 @@
+﻿@use 'sass:list';
+
+@use 'mixins' as mixins;
+
+$_private-color-token: --md-sys-color;
+$_private-color-names: primary,
+on-primary,
+primary-container,
+on-primary-container,
+secondary,
+on-secondary,
+secondary-container,
+on-secondary-container,
+tertiary,
+on-tertiary,
+tertiary-container,
+on-tertiary-container,
+error,
+on-error,
+error-container,
+on-error-container,
+outline,
+background,
+on-background,
+surface,
+on-surface,
+surface-variant,
+on-surface-variant,
+inverse-surface,
+inverse-on-surface;
+$_private-surface-names: surface, surface-variant, inverse-surface;
+
+@function get-roles-list() {
+  $color-list: _private-get-color-list();
+  $surface-tones-list: _private-get-surface-tones-list();
+  @return list.join($color-list, $surface-tones-list);
+}
+
+@function get-roles-map() {
+}
+
+@function _private-get-color-list() {
+  $color-list: null;
+
+  @each $name in $_private-color-names {
+    $item: #{$_private-color-token}-#{$name};
+    $color-list: mixins.add-to-list($color-list, $item);
+  }
+
+  @return $color-list;
+}
+
+@function _private-get-surface-tones-list() {
+  $surface-tones-list: null;
+
+  @each $name in $_private-surface-names {
+    @for $i from 1 through 5 {
+      $item: #{$_private-color-token}-#{$name}-#{$i};
+      $surface-tones-list: mixins.add-to-list($surface-tones-list, $item);
+    }
+  }
+
+  @return $surface-tones-list;
+}
+
+@function _private-get-surface-tones-map() {
+}
