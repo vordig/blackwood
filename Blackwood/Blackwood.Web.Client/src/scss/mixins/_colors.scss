@@ -1,0 +1,17 @@
+﻿$_private-color-token: --md-sys-color;
+
+@mixin primary {
+  color: var(#{$_private-color-token}-primary);
+}
+
+@mixin secondary {
+  color: var(#{$_private-color-token}-secondary);
+}
+
+@mixin tertiary {
+  color: var(#{$_private-color-token}-tertiary);
+}
+
+@mixin error {
+  color: var(#{$_private-color-token}-error);
+}

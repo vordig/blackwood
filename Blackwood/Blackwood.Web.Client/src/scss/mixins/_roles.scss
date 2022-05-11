@@ -34,16 +34,28 @@
   @include _private-set-basic-role(--md-sys-color-background, --md-sys-color-on-background);
 }
 
-@mixin surface($tone: 0) {
-  @include _private-set-basic-role(--md-sys-color-surface-#{$tone}, --md-sys-color-on-surface);
+@mixin surface($tone: null) {
+  @if $tone {
+    @include _private-set-basic-role(--md-sys-color-surface-#{$tone}, --md-sys-color-on-surface);
+  } @else {
+    @include _private-set-basic-role(--md-sys-color-surface, --md-sys-color-on-surface);
+  }
 }
 
-@mixin surface-variant($tone: 0) {
-  @include _private-set-basic-role(--md-sys-color-surface-variant-#{$tone}, --md-sys-color-on-surface-variant);
+@mixin surface-variant($tone: null) {
+  @if $tone {
+    @include _private-set-basic-role(--md-sys-color-surface-variant-#{$tone}, --md-sys-color-on-surface-variant);
+  } @else {
+    @include _private-set-basic-role(--md-sys-color-surface-variant, --md-sys-color-on-surface-variant);
+  }
 }
 
-@mixin inverse-surface($tone: 0) {
-  @include _private-set-basic-role(--md-sys-color-inverse-surface-#{$tone}, --md-sys-color-inverse-on-surface);
+@mixin inverse-surface($tone: null) {
+  @if $tone {
+    @include _private-set-basic-role(--md-sys-color-inverse-surface-#{$tone}, --md-sys-color-inverse-on-surface);
+  } @else {
+    @include _private-set-basic-role(--md-sys-color-inverse-surface, --md-sys-color-inverse-on-surface);
+  }
 }
 
 @mixin _private-set-accent-role($accent-color, $is-container: false) {

@@ -1,8 +1,25 @@
 ﻿@use '../../mixins/roles';
 @use '../../mixins/states';
 @use '../../mixins/typography';
+@use '../../mixins/colors';
 
 .bw-messages-panel {
-  @include roles.surface(1);
-  @include typography.headline-medium;
+  p {
+    @include typography.body-medium;
+    margin: 0;
+  }
+
+  .from {
+    @include colors.tertiary;
+
+    &.me {
+      @include colors.primary;
+    }
+    &.opponent {
+      @include colors.secondary;
+    }
+    &.system {
+      @include colors.tertiary;
+    }
+  }
 }

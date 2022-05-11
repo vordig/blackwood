@@ -7,7 +7,10 @@
   grid-template-rows: 1fr 1fr;
   grid-template-areas: 'main actions' 'main messages';
 
-  .bw-messages-panel {
+  padding-inline: 32px;
+  padding-block: 16px;
+
+  .messages-panel {
     grid-area: messages;
   }
 

@@ -1,0 +1,17 @@
+﻿@use '../mixins/roles';
+
+.bw-card {
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+
+  &.bw-card-filled {
+    @include roles.surface-variant();
+  }
+
+  & > .bw-card-content {
+    padding: 16px;
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+}
