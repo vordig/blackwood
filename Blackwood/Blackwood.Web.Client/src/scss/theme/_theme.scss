@@ -3,6 +3,7 @@
 
 @use 'typography' as typography;
 @use 'roles' as roles;
+@use 'states' as states;
 @use '../tokens' as tokens;
 @use 'mixins' as mixins;
 
@@ -27,6 +28,10 @@
 }
 
 @mixin _private-init-states($theme-name) {
+  $states-map: states.get-states-map();
+  $states-list: states.get-states-list();
+  @include _private-add-map-to-theme($theme-name, $states-map);
+  @include _private-add-colors-to-theme($theme-name, $states-list);
 }
 
 @mixin _private-add-colors-to-theme($theme-name, $color-list) {

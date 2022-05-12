@@ -4,6 +4,7 @@
   border-radius: 12px;
   overflow: hidden;
   display: flex;
+  flex-direction: column;
 
   &.bw-card-filled {
     @include roles.surface-variant();
@@ -13,5 +14,13 @@
     padding: 16px;
     overflow-y: auto;
     flex-grow: 1;
+  }
+
+  & > .bw-card-footer {
+    padding: 16px;
+    border-top: 1px solid var(--md-sys-color-outline);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
   }
 }

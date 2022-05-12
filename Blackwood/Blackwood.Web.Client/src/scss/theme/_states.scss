@@ -1,0 +1,123 @@
+﻿@use 'sass:color';
+@use 'sass:map';
+
+@use '../tokens' as tokens;
+
+$_private-color-token: --md-sys-color;
+$_private-button-token: #{$_private-color-token}-button;
+
+@function get-states-list() {
+  $button-type: outlined;
+  $states-list: #{$_private-button-token}-#{$button-type},
+  #{$_private-button-token}-#{$button-type}-outline,
+  #{$_private-button-token}-on-#{$button-type},
+  #{$_private-button-token}-#{$button-type}-hover,
+  #{$_private-button-token}-#{$button-type}-hover-outline,
+  #{$_private-button-token}-on-#{$button-type}-hover,
+  #{$_private-button-token}-#{$button-type}-focus,
+  #{$_private-button-token}-#{$button-type}-focus-outline,
+  #{$_private-button-token}-on-#{$button-type}-focus,
+  #{$_private-button-token}-#{$button-type}-pressed,
+  #{$_private-button-token}-#{$button-type}-pressed-outline,
+  #{$_private-button-token}-on-#{$button-type}-pressed,
+  #{$_private-button-token}-#{$button-type}-disabled,
+  #{$_private-button-token}-#{$button-type}-disabled-outline,
+  #{$_private-button-token}-on-#{$button-type}-disabled;
+
+  @return $states-list;
+}
+
+@function get-states-map() {
+  $states-map: ();
+  $button-states-map: _private-get-button-states-map();
+  $states-map: map.merge($states-map, $button-states-map);
+
+  @return $states-map;
+}
+
+@function _private-get-button-states-map() {
+  $button-states-map: ();
+  $outlined-button-states-map: _private-add-outlined-button-states();
+  $button-states-map: map.merge($button-states-map, $outlined-button-states-map);
+
+  @return $button-states-map;
+}
+
+@function _private-add-outlined-button-states() {
+  $button-states-map: ();
+
+  $button-type: outlined;
+
+  $outline-color-token: #{$_private-color-token}-outline;
+  $outline-color-light: map.get(tokens.$color-palette, #{$outline-color-token}-light);
+  $outline-color-dark: map.get(tokens.$color-palette, #{$outline-color-token}-dark);
+
+  $primary-color-token: #{$_private-color-token}-primary;
+  $primary-color-light: map.get(tokens.$color-palette, #{$primary-color-token}-light);
+  $primary-color-dark: map.get(tokens.$color-palette, #{$primary-color-token}-dark);
+
+  $on-surface-color-token: #{$_private-color-token}-on-surface;
+  $on-surface-color-light: map.get(tokens.$color-palette, #{$on-surface-color-token}-light);
+  $on-surface-color-dark: map.get(tokens.$color-palette, #{$on-surface-color-token}-dark);
+
+  // enabled
+  $button-states-map-to-add: (
+    #{$_private-button-token}-#{$button-type}-outline-light: $outline-color-light,
+    #{$_private-button-token}-#{$button-type}-outline-dark: $outline-color-dark,
+    #{$_private-button-token}-on-#{$button-type}-light: $primary-color-light,
+    #{$_private-button-token}-on-#{$button-type}-dark: $primary-color-dark
+  );
+  $button-states-map: map.merge($button-states-map, $button-states-map-to-add);
+
+  // disabled
+  $disabled-opacity: map.get(tokens.$disabled-state-opacity, --md-sys-state-disabled-container-opacity);
+  $on-disabled-opacity: map.get(tokens.$disabled-state-opacity, --md-sys-state-disabled-content-opacity);
+  $button-states-map-to-add: (
+    #{$_private-button-token}-#{$button-type}-disabled-outline-light: color.change($on-surface-color-light, $alpha: $disabled-opacity),
+    #{$_private-button-token}-#{$button-type}-disabled-outline-dark: color.change($on-surface-color-dark, $alpha: $disabled-opacity),
+    #{$_private-button-token}-on-#{$button-type}-disabled-light: color.change($on-surface-color-light, $alpha: $on-disabled-opacity),
+    #{$_private-button-token}-on-#{$button-type}-disabled-dark: color.change($on-surface-color-dark, $alpha: $on-disabled-opacity)
+  );
+  $button-states-map: map.merge($button-states-map, $button-states-map-to-add);
+
+  // hovered
+  $state: hover;
+  $state-layer-opacity: map.get(tokens.$state-layer-opacity, --md-sys-state-#{$state}-state-layer-opacity);
+  $button-states-map-to-add: (
+    #{$_private-button-token}-#{$button-type}-#{$state}-light: color.change($primary-color-light, $alpha: $state-layer-opacity),
+    #{$_private-button-token}-#{$button-type}-#{$state}-dark: color.change($primary-color-dark, $alpha: $state-layer-opacity),
+    #{$_private-button-token}-#{$button-type}-#{$state}-outline-light: $outline-color-light,
+    #{$_private-button-token}-#{$button-type}-#{$state}-outline-dark: $outline-color-dark,
+    #{$_private-button-token}-on-#{$button-type}-#{$state}-light: $primary-color-light,
+    #{$_private-button-token}-on-#{$button-type}-#{$state}-dark: $primary-color-dark
+  );
+  $button-states-map: map.merge($button-states-map, $button-states-map-to-add);
+
+  // focused
+  $state: focus;
+  $state-layer-opacity: map.get(tokens.$state-layer-opacity, --md-sys-state-#{$state}-state-layer-opacity);
+  $button-states-map-to-add: (
+    #{$_private-button-token}-#{$button-type}-#{$state}-light: color.change($primary-color-light, $alpha: $state-layer-opacity),
+    #{$_private-button-token}-#{$button-type}-#{$state}-dark: color.change($primary-color-dark, $alpha: $state-layer-opacity),
+    #{$_private-button-token}-#{$button-type}-#{$state}-outline-light: $outline-color-light,
+    #{$_private-button-token}-#{$button-type}-#{$state}-outline-dark: $outline-color-dark,
+    #{$_private-button-token}-on-#{$button-type}-#{$state}-light: $primary-color-light,
+    #{$_private-button-token}-on-#{$button-type}-#{$state}-dark: $primary-color-dark
+  );
+  $button-states-map: map.merge($button-states-map, $button-states-map-to-add);
+
+  // pressed
+  $state: pressed;
+  $state-layer-opacity: map.get(tokens.$state-layer-opacity, --md-sys-state-#{$state}-state-layer-opacity);
+  $button-states-map-to-add: (
+    #{$_private-button-token}-#{$button-type}-#{$state}-light: color.change($primary-color-light, $alpha: $state-layer-opacity),
+    #{$_private-button-token}-#{$button-type}-#{$state}-dark: color.change($primary-color-dark, $alpha: $state-layer-opacity),
+    #{$_private-button-token}-#{$button-type}-#{$state}-outline-light: $outline-color-light,
+    #{$_private-button-token}-#{$button-type}-#{$state}-outline-dark: $outline-color-dark,
+    #{$_private-button-token}-on-#{$button-type}-#{$state}-light: $primary-color-light,
+    #{$_private-button-token}-on-#{$button-type}-#{$state}-dark: $primary-color-dark
+  );
+  $button-states-map: map.merge($button-states-map, $button-states-map-to-add);
+
+  @return $button-states-map;
+}

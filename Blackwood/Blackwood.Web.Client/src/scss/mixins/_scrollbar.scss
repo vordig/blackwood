@@ -1,14 +1,36 @@
-﻿@mixin init {
+﻿$_private-scrollbar-size: 24px;
+$_private-scrollbar-track-margin: 8px;
+$_private-scrollbar-thumb-size: 56px;
+
+@mixin init {
   @at-root {
-    ::-webkit-scrollbar {
-      width: 24px;
+    html {
+      scroll-behavior: smooth;
     }
+
+    ::-webkit-scrollbar {
+      width: $_private-scrollbar-size;
+      height: $_private-scrollbar-size;
+    }
+
+    ::-webkit-scrollbar-track {
+      margin-block: $_private-scrollbar-track-margin;
+    }
+
     ::-webkit-scrollbar-thumb {
-      height: 56px;
-      border-radius: 12px;
+      height: $_private-scrollbar-thumb-size;
+      width: $_private-scrollbar-thumb-size;
+      border-radius: 100vw;
       border: 8px solid transparent;
       background-clip: content-box;
       background-color: var(--md-sys-color-outline);
+    }
+
+    @supports (scrollbar-color: var(--md-sys-color-outline) transparent) {
+      * {
+        scrollbar-color: var(--md-sys-color-outline) transparent;
+        scrollbar-width: thin;
+      }
     }
   }
 }

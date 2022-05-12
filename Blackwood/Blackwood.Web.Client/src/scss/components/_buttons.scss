@@ -1,0 +1,79 @@
+﻿@use '../mixins/roles';
+@use '../mixins/typography';
+
+@mixin _private-common-button {
+  height: 40px;
+  padding-inline: 24px;
+  border-radius: 20px;
+}
+
+@mixin _private-set-accent-role($accent-color, $is-container: false) {
+  $container-var: --md-sys-color-#{$accent-color};
+  $color-var: --md-sys-color-on-#{$accent-color};
+
+  @if $is-container {
+    $container-var: --md-sys-color-#{$accent-color}-container;
+    $color-var: --md-sys-color-on-#{$accent-color}-container;
+  }
+
+  @include _private-set-basic-role($container-var, $color-var);
+}
+
+@mixin _private-set-basic-role($container-var, $color-var) {
+  --container: var(#{$container-var});
+  --color: var(#{$color-var});
+
+  background-color: var(--container);
+  color: var(--color);
+}
+
+.bw-button {
+  outline: none;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:not([disabled]) {
+    cursor: pointer;
+  }
+
+  &::-moz-focus-inner {
+    border: 0;
+  }
+
+  &.bw-button-outlined {
+    @include _private-common-button;
+    @include typography.label-large;
+
+    --container: var(--md-sys-color-button-outlined);
+    --outline: var(--md-sys-color-button-outlined-outline);
+    --color: var(--md-sys-color-button-on-outlined);
+
+    background-color: var(--container);
+    color: var(--color);
+    border: 1px solid var(--outline);
+
+    &:hover {
+      --container: var(--md-sys-color-button-outlined-hover);
+      --outline: var(--md-sys-color-button-outlined-hover-outline);
+      --color: var(--md-sys-color-button-on-outlined-hover);
+    }
+
+    &:focus {
+      --container: var(--md-sys-color-button-outlined-focus);
+      --outline: var(--md-sys-color-button-outlined-focus-outline);
+      --color: var(--md-sys-color-button-on-outlined-focus);
+    }
+
+    &:active {
+      --container: var(--md-sys-color-button-outlined-pressed);
+      --outline: var(--md-sys-color-button-outlined-pressed-outline);
+      --color: var(--md-sys-color-button-on-outlined-pressed);
+    }
+
+    &[disabled] {
+      --container: var(--md-sys-color-button-outlined-disabled);
+      --outline: var(--md-sys-color-button-outlined-disabled-outline);
+      --color: var(--md-sys-color-button-on-outlined-disabled);
+    }
+  }
+}
