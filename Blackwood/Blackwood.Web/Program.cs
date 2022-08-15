@@ -48,7 +48,7 @@ builder.Services.AddAuthorization(config =>
     config.AddPolicy("User", new AuthorizationPolicyBuilder().RequireAuthenticatedUser().RequireRole("User").Build());
 });
 
-builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("Auth"));
+builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("Auth")); 
 
 var mapperConfig = new MapperConfiguration(mc =>
 {
@@ -63,9 +63,15 @@ builder.Services.AddSingleton(mapper);
 // change to transient
 builder.Services.AddSingleton<ISessionService, SessionService>();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 app.UseRouting();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthentication();
 app.UseAuthorization();
