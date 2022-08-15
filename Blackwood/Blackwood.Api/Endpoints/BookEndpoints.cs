@@ -1,9 +1,12 @@
 ﻿using Blackwood.Domain;
+using Blackwood.Services;
 
 namespace Blackwood.Api.Endpoints;
 
 public static class BookEndpoints
 {
+    private const string BaseUrl = "api/books/";
+    
     public static void MapBookEndpoints(this WebApplication app)
     {
         app.MapGet("api/books", GetBooksAsync);
@@ -13,31 +16,35 @@ public static class BookEndpoints
         app.MapDelete("api/books/{id:guid}", DeleteBookAsync);
     }
 
-    private static async Task<IResult> GetBooksAsync(CancellationToken cancellationToken)
+    private static async Task<IResult> GetBooksAsync(BookService bookService, CancellationToken cancellationToken)
     {
-        return Results.Ok();
-        // throw new NotImplementedException();
-        // var result = await cirqueDuSoleilService.GetSeriesAsync(cancellationToken);
-        // return Results.Json(result);
+        var result = await bookService.GetBooksAsync(cancellationToken);
+        return Results.Json(result);
     }
     
-    private static async Task<IResult> GetBookAsync(Guid id, CancellationToken cancellationToken)
+    private static async Task<IResult> GetBookAsync(BookService bookService, Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = await bookService.GetBookAsync(id, cancellationToken);
+        return result is null ? Results.NotFound() : Results.Json(result);
     }
     
-    private static async Task<IResult> CreateBookAsync(Book book, CancellationToken cancellationToken)
+    private static async Task<IResult> CreateBookAsync(BookService bookService, Book book, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = await bookService.CreateBookAsync(book, cancellationToken);
+        var response = result;
+        // var response = mapper.Map<CirqueDuSoleilOrderListItemResponse>(result);
+        return Results.Created($"{BaseUrl}orders/{response.Id}", response);
     }
     
-    private static async Task<IResult> UpdateBookAsync(Guid id, Book book, CancellationToken cancellationToken)
+    private static async Task<IResult> UpdateBookAsync(BookService bookService, Guid id, Book book, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = await bookService.UpdateBookAsync(book, cancellationToken);
+        return result is null ? Results.NotFound() : Results.Json(result);
     }
     
-    private static async Task<IResult> DeleteBookAsync(Guid id, CancellationToken cancellationToken)
+    private static async Task<IResult> DeleteBookAsync(BookService bookService, Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = await bookService.DeleteBookAsync(id, cancellationToken);
+        return Results.Json(result);
     }
 }

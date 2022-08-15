@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Blackwood.Core\Blackwood.Core.csproj" />
+      <ProjectReference Include="..\Blackwood.Infrastructure\Blackwood.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>

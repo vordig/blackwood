@@ -12,6 +12,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Blackwood.Domain\Blackwood.Domain.csproj" />
       <ProjectReference Include="..\Blackwood.Infrastructure\Blackwood.Infrastructure.csproj" />
+      <ProjectReference Include="..\Blackwood.Services\Blackwood.Services.csproj" />
     </ItemGroup>
 
     <ItemGroup>

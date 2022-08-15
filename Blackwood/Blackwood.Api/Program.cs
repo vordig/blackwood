@@ -1,11 +1,22 @@
 ﻿using Blackwood.Api.Endpoints;
 using Blackwood.Infrastructure;
 using Blackwood.Infrastructure.Database;
+using Blackwood.Services;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSingleton(typeof(IMongoDatabase), _ =>
+{
+    var connectionString = builder.Configuration["Database:ConnectionString"];
+    var url = MongoUrl.Create(connectionString);
+    var client = new MongoClient(connectionString);
+    return client.GetDatabase(url.DatabaseName);
+});
+
 builder.Services.AddScoped<DatabaseContext>();
 builder.Services.AddScoped<BookRepository>();
+builder.Services.AddScoped<BookService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
