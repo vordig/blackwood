@@ -1,10 +1,19 @@
-﻿using Blackwood.Api.Endpoints;
+﻿using AutoMapper;
+using Blackwood.Api.Endpoints;
+using Blackwood.Api.Mapping;
 using Blackwood.Infrastructure;
 using Blackwood.Infrastructure.Database;
 using Blackwood.Services;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new BookProfile());
+});
+var mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 builder.Services.AddSingleton(typeof(IMongoDatabase), _ =>
 {
