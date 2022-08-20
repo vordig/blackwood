@@ -19,36 +19,41 @@ public static class BookEndpoints
         app.MapDelete("api/books/{id:guid}", DeleteBookAsync);
     }
 
-    [ProducesResponseType(typeof(IEnumerable<BookListItemSchema>), 200)]
+    [ProducesResponseType(typeof(IEnumerable<BookCompactSchema>), 200)]
     private static async Task<IResult> GetBooksAsync(BookService bookService, IMapper mapper,
         CancellationToken cancellationToken)
     {
         var result = await bookService.GetBooksAsync(cancellationToken);
-        var response = mapper.Map<IEnumerable<BookListItemSchema>>(result);
+        var response = mapper.Map<IEnumerable<BookCompactSchema>>(result);
         return Results.Json(response);
     }
 
-    private static async Task<IResult> GetBookAsync(BookService bookService, Guid id,
+    private static async Task<IResult> GetBookAsync(BookService bookService, IMapper mapper, Guid id,
         CancellationToken cancellationToken)
     {
         var result = await bookService.GetBookAsync(id, cancellationToken);
-        return result is null ? Results.NotFound() : Results.Json(result);
+        if (result is null)
+            return Results.NotFound();
+        var response = mapper.Map<BookDetailedSchema>(result);
+        return Results.Json(response);
     }
 
-    private static async Task<IResult> CreateBookAsync(BookService bookService, Book book,
-        CancellationToken cancellationToken)
+    private static async Task<IResult> CreateBookAsync(BookService bookService, IMapper mapper,
+        BookUpdateSchema bookUpdate, CancellationToken cancellationToken)
     {
+        var book = mapper.Map<Book>(bookUpdate);
         var result = await bookService.CreateBookAsync(book, cancellationToken);
-        var response = result;
-        // var response = mapper.Map<CirqueDuSoleilOrderListItemResponse>(result);
+        var response = mapper.Map<BookNotificationSchema>(result);
         return Results.Created($"{BaseUrl}orders/{response.Id}", response);
     }
 
-    private static async Task<IResult> UpdateBookAsync(BookService bookService, Guid id, Book book,
-        CancellationToken cancellationToken)
+    private static async Task<IResult> UpdateBookAsync(BookService bookService, IMapper mapper, Guid id,
+        BookUpdateSchema bookUpdate, CancellationToken cancellationToken)
     {
+        var book = mapper.Map<Book>(bookUpdate);
         var result = await bookService.UpdateBookAsync(book, cancellationToken);
-        return result is null ? Results.NotFound() : Results.Json(result);
+        var response = mapper.Map<BookNotificationSchema>(result);
+        return result is null ? Results.NotFound() : Results.Json(response);
     }
 
     private static async Task<IResult> DeleteBookAsync(BookService bookService, Guid id,
