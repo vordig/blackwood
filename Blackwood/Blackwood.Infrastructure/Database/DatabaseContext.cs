@@ -53,4 +53,18 @@ public class DatabaseContext
             .ConfigureAwait(false);
         return result.DeletedCount;
     }
+
+    public async ValueTask<TEntity?> GetOneAsync<TEntity>(string collection, FilterDefinition<TEntity> filter,
+        CancellationToken cancellationToken) where TEntity : DatabaseEntity
+    {
+        var result = await Collection<TEntity>(collection).Find(filter).SingleOrDefaultAsync(cancellationToken);
+        return result;
+    }
+    
+    public async ValueTask<long> CountAsync<TEntity>(string collection, FilterDefinition<TEntity> filter,
+        CancellationToken cancellationToken) where TEntity : DatabaseEntity
+    {
+        var result = await Collection<TEntity>(collection).Find(filter).CountDocumentsAsync(cancellationToken);
+        return result;
+    }
 }

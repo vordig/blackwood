@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Blackwood.Api.Schemas;
+using Blackwood.Api.Schemas.Book;
 using Blackwood.Domain;
 using Blackwood.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +44,7 @@ public static class BookEndpoints
         var book = mapper.Map<Book>(bookUpdate);
         var result = await bookService.CreateBookAsync(book, cancellationToken);
         var response = mapper.Map<BookNotificationSchema>(result);
-        return Results.Created($"{BaseUrl}orders/{response.Id}", response);
+        return Results.Created($"{BaseUrl}{response.Id}", response);
     }
 
     private static async Task<IResult> UpdateBookAsync(BookService bookService, IMapper mapper, Guid id,

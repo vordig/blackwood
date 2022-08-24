@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Blackwood.Api.Schemas;
+using Blackwood.Api.Schemas.Book;
 using Blackwood.Domain;
 
 namespace Blackwood.Api.Mapping;

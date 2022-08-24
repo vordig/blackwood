@@ -1,4 +1,4 @@
-﻿namespace Blackwood.Api.Schemas;
+﻿namespace Blackwood.Api.Schemas.Book;
 
 public record BookNotificationSchema
 {
